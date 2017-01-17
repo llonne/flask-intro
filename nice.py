@@ -16,7 +16,8 @@ AWESOMENESS = [
 def start_here():
     """Home page."""
 
-    return "<!doctype html><html>Hi! This is the home page.<html>"
+    return """<!doctype html><html>Hi! This is the home page.
+          <br><a href="/hello">To go to the greeting, click here</a><html>"""
 
 
 @app.route('/hello')
@@ -32,8 +33,20 @@ def say_hello():
       <body>
         <h1>Hi There!</h1>
         <form action="/greet">
-          <label>What's your name? <input type="text" name="person"></label>
-          <input type="submit">
+          <label>What's your name? <input type="text" name="person"></label><br>
+          Choose a compliment:
+            <input type="radio" name="compliment" value="awesome">Awesome
+            <input type="radio" name="compliment" value="terrific">Terrific
+            <input type="radio" name="compliment" value="fantastic">Fantastic
+          <br><input type="submit">
+        </form><br>
+        <form action="/diss">
+          <label>What's your name? <input type="text" name="person"></label><br>
+          Choose an insult:
+            <input type="radio" name="insult" value="smelly">Smelly
+            <input type="radio" name="insult" value="funnylooking">Funny-Looking
+            <input type="radio" name="insult" value="Mother was a hamster and Father smelled of elderberries! (*your)">Monty Python
+          <br><input type="submit">
         </form>
       </body>
     </html>
@@ -46,7 +59,8 @@ def greet_person():
 
     player = request.args.get("person")
 
-    compliment = choice(AWESOMENESS)
+    #compliment = choice(AWESOMENESS)
+    compliment = request.args.get("compliment")
 
     return """
     <!doctype html>
@@ -55,10 +69,32 @@ def greet_person():
         <title>A Compliment</title>
       </head>
       <body>
-        Hi %s I think you're %s!
+        Hi %s, I think you're %s!
       </body>
     </html>
     """ % (player, compliment)
+
+
+@app.route('/diss')
+def diss_person():
+    """Get user by name."""
+
+    player = request.args.get("person")
+
+    #compliment = choice(AWESOMENESS)
+    insult = request.args.get("insult")
+
+    return """
+    <!doctype html>
+    <html>
+      <head>
+        <title>An Insult</title>
+      </head>
+      <body>
+        Hi %s, I think you're %s!
+      </body>
+    </html>
+    """ % (player, insult)
 
 
 if __name__ == '__main__':
